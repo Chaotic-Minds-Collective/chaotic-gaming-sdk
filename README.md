@@ -1,3 +1,9 @@
 # Chaotic Gaming SDK
 
-Shared TypeScript contracts for Core APIs, events, service identities and game adapters. Consumers communicate with Core over authenticated APIs; this package contains no database client or secrets. Keep contracts backwards-compatible and document breaking changes.
+Shared TypeScript contracts used by the Core API, website, Discord bot and game adapters.
+
+## Principles
+- Contracts only: no database connection, secrets, or runtime coupling.
+- Stable, versioned API and event shapes.
+- Game adapters expose capabilities explicitly; unsupported operations must not be guessed.
+- External identifiers remain strings and are namespaced by provider/game.
