@@ -36,7 +36,7 @@ export interface CoreApiClientOptions {
 
 export class CoreApiClient {
   private readonly baseUrl: string;
-  private readonly token?: string;
+  private readonly token: string | undefined;
   private readonly fetchImpl: typeof fetch;
   private readonly timeoutMs: number;
 
