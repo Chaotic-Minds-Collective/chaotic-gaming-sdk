@@ -83,7 +83,7 @@ test("acknowledges a game reward delivery", async () => {
   assert.match(captured.url, /\/rewards\/reward-1\/ack$/);
   assert.equal(JSON.parse(captured.init.body).outcome, "delivered");
 });
-ÿ
+
 
 test("resolves only verified external player identities through the server-scoped Core API", async () => {
   let captured;
