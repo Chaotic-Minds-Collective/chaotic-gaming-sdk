@@ -15,6 +15,8 @@ import type {
   PluginSummary,
   Product,
   RewardDelivery,
+  ResolvePlayerIdentityRequest,
+  ResolvePlayerIdentityResponse,
   ServerHeartbeat,
   SetPluginDesiredStateRequest,
 } from "./contracts.js";
@@ -166,6 +168,16 @@ export class CoreApiClient {
     return this.request(`/integrations/servers/${encodeURIComponent(serverId)}/plugins/${encodeURIComponent(pluginId)}/health`, {
       method: "POST",
       body: JSON.stringify(report),
+    }, true);
+  }
+
+  async resolvePlayerIdentity(serverId: string, request: ResolvePlayerIdentityRequest): Promise<ApiSuccess<ResolvePlayerIdentityResponse>> {
+    if (!request.provider || request.provider.length > 32 || !request.externalId || request.externalId.length > 128) {
+      throw new TypeError("A valid identity provider and external ID are required.");
+    }
+    return this.request(`/integrations/servers/${encodeURIComponent(serverId)}/players/resolve`, {
+      method: "POST",
+      body: JSON.stringify(request),
     }, true);
   }
 

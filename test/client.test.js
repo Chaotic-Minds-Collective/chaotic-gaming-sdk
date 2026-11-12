@@ -83,3 +83,21 @@ test("acknowledges a game reward delivery", async () => {
   assert.match(captured.url, /\/rewards\/reward-1\/ack$/);
   assert.equal(JSON.parse(captured.init.body).outcome, "delivered");
 });
+ÿ
+
+test("resolves only verified external player identities through the server-scoped Core API", async () => {
+  let captured;
+  const client = new CoreApiClient({
+    baseUrl: "https://core.example.test",
+    token: "synthetic-game-event-token",
+    fetchImpl: async (url, init) => {
+      captured = { url: String(url), init };
+      return new Response(JSON.stringify({ data: { linked: true, principalId: "player-1", username: "danielle", displayName: "Player" } }), { status: 200 });
+    },
+  });
+  const result = await client.resolvePlayerIdentity("server-1", { provider: "steam", externalId: "76561198000000000" });
+  assert.equal(result.data.linked, true);
+  assert.equal(result.data.principalId, "player-1");
+  assert.match(captured.url, /\/players\/resolve$/);
+  assert.equal(JSON.parse(captured.init.body).provider, "steam");
+});

@@ -186,3 +186,13 @@ export interface AcknowledgeRewardResponse {
   rewardId: string;
   outcome?: "delivered" | "failed";
 }
+ÿÿ
+
+export interface ResolvePlayerIdentityRequest {
+  provider: string;
+  externalId: string;
+}
+
+export type ResolvePlayerIdentityResponse =
+  | { linked: false }
+  | { linked: true; principalId: string; username: string; displayName: string | null };
