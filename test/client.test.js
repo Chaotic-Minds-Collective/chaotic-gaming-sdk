@@ -50,3 +50,36 @@ test("sends idempotency keys for order creation", async () => {
   await client.createOrder({ currency: "USD", items: [] }, "checkout-123456");
   assert.equal(captured.headers.get("Idempotency-Key"), "checkout-123456");
 });
+
+test("claims pending game rewards with the server-scoped service credential", async () => {
+  let captured;
+  const client = new CoreApiClient({
+    baseUrl: "https://core.example.test",
+    token: "synthetic-reward-worker-token",
+    fetchImpl: async (url, init) => {
+      captured = { url: String(url), init };
+      return new Response(JSON.stringify({ data: [] }), { status: 200 });
+    },
+  });
+  await client.claimRewards("server-1", { limit: 5 });
+  assert.match(captured.url, /\/integrations\/servers\/server-1\/rewards\/claim$/);
+  assert.equal(JSON.parse(captured.init.body).limit, 5);
+});
+
+test("acknowledges a game reward delivery", async () => {
+  let captured;
+  const client = new CoreApiClient({
+    baseUrl: "https://core.example.test",
+    token: "synthetic-reward-worker-token",
+    fetchImpl: async (url, init) => {
+      captured = { url: String(url), init };
+      return new Response(JSON.stringify({ data: { accepted: true, duplicate: false, rewardId: "reward-1", outcome: "delivered" } }), { status: 202 });
+    },
+  });
+  await client.acknowledgeReward("server-1", "reward-1", {
+    outcome: "delivered",
+    response: { providerReceipt: "grant-123" },
+  });
+  assert.match(captured.url, /\/rewards\/reward-1\/ack$/);
+  assert.equal(JSON.parse(captured.init.body).outcome, "delivered");
+});

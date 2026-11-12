@@ -1,4 +1,4 @@
-export const CORE_API_CONTRACT_VERSION = "0.2.0" as const;
+export const CORE_API_CONTRACT_VERSION = "0.3.0" as const;
 
 export type GameKey = "atlas" | "7dtd" | "ark";
 export type PluginGame = GameKey | "platform";
@@ -151,4 +151,32 @@ export interface PluginHealthReport {
 
 export interface SetPluginDesiredStateRequest {
   desiredState: "enabled" | "disabled";
+}
+
+export interface RewardDelivery {
+  id: string;
+  entitlementId: string;
+  game: GameKey;
+  targetExternalId: string;
+  deliveryPayload: Record<string, unknown>;
+  attempts: number;
+  idempotencyKey: string;
+  leaseExpiresAt: string;
+}
+
+export interface ClaimRewardsRequest {
+  limit?: number;
+}
+
+export interface AcknowledgeRewardRequest {
+  outcome: "delivered" | "failed";
+  response?: Record<string, unknown>;
+  error?: string;
+}
+
+export interface AcknowledgeRewardResponse {
+  accepted: boolean;
+  duplicate: boolean;
+  rewardId: string;
+  outcome?: "delivered" | "failed";
 }

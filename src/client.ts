@@ -1,5 +1,8 @@
 import type {
+  AcknowledgeRewardRequest,
+  AcknowledgeRewardResponse,
   ApiSuccess,
+  ClaimRewardsRequest,
   CreateOrderRequest,
   CreateOrderResponse,
   Entitlement,
@@ -11,6 +14,7 @@ import type {
   PluginManifest,
   PluginSummary,
   Product,
+  RewardDelivery,
   ServerHeartbeat,
   SetPluginDesiredStateRequest,
 } from "./contracts.js";
@@ -162,6 +166,20 @@ export class CoreApiClient {
     return this.request(`/integrations/servers/${encodeURIComponent(serverId)}/plugins/${encodeURIComponent(pluginId)}/health`, {
       method: "POST",
       body: JSON.stringify(report),
+    }, true);
+  }
+
+  async claimRewards(serverId: string, request: ClaimRewardsRequest = {}): Promise<ApiSuccess<RewardDelivery[]>> {
+    return this.request(`/integrations/servers/${encodeURIComponent(serverId)}/rewards/claim`, {
+      method: "POST",
+      body: JSON.stringify(request),
+    }, true);
+  }
+
+  async acknowledgeReward(serverId: string, rewardId: string, request: AcknowledgeRewardRequest): Promise<ApiSuccess<AcknowledgeRewardResponse>> {
+    return this.request(`/integrations/servers/${encodeURIComponent(serverId)}/rewards/${encodeURIComponent(rewardId)}/ack`, {
+      method: "POST",
+      body: JSON.stringify(request),
     }, true);
   }
 }
