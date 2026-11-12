@@ -9,21 +9,17 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: sdk-ci-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - name: Install dependencies
         run: npm install
       - name: Typecheck
         run: npm run typecheck
-      - name: Test and build
+      - name: Test contracts
         run: npm test

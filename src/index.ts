@@ -1,8 +1,18 @@
 export type Identifier = string & { readonly __brand: "Identifier" };
 export type ISODateTime = string & { readonly __brand: "ISODateTime" };
 
-export type GameKey = "atlas" | "7dtd" | "ark";
+export const SUPPORTED_GAMES = ["atlas", "7dtd", "ark"] as const;
+export type GameKey = (typeof SUPPORTED_GAMES)[number];
 export type ServerStatus = "unknown" | "online" | "offline" | "maintenance" | "retired";
+
+export function isGameKey(value: unknown): value is GameKey {
+  return typeof value === "string" && (SUPPORTED_GAMES as readonly string[]).includes(value);
+}
+
+export function isServerStatus(value: unknown): value is ServerStatus {
+  return value === "unknown" || value === "online" || value === "offline" ||
+    value === "maintenance" || value === "retired";
+}
 
 export interface ServerReference {
   id: string;
