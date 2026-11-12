@@ -1,21 +1,34 @@
-export interface EventEnvelope<TPayload = unknown> {
+import type { GameKey, ISODateTime } from "./index.js";
+
+export interface EventEnvelope<TPayload extends Record<string, unknown> = Record<string, unknown>> {
   id: string;
   type: string;
-  version: number;
-  occurredAt: string;
+  version: 1;
+  occurredAt: ISODateTime;
+  producer: string;
+  correlationId?: string;
   aggregate: { type: string; id: string };
   payload: TPayload;
 }
 
-export type ChaoticGamingEventType =
-  | "player.account.created"
-  | "player.account.linked"
-  | "player.account.unlinked"
-  | "commerce.purchase.confirmed"
-  | "commerce.entitlement.granted"
-  | "commerce.reward.queued"
-  | "commerce.reward.delivered"
-  | "game.player.joined"
-  | "game.player.transferred"
-  | "game.server.status_changed"
-  | "community.ticket.created";
+export interface PlayerJoinedPayload {
+  game: GameKey;
+  serverId: string;
+  externalPlayerId: string;
+  principalId?: string;
+}
+
+export interface PlayerTransferredPayload {
+  game: GameKey;
+  clusterId: string;
+  externalPlayerId: string;
+  sourceServerId?: string;
+  destinationServerId?: string;
+}
+
+export interface ServerStatusChangedPayload {
+  game: GameKey;
+  serverId: string;
+  previousStatus: string;
+  currentStatus: string;
+}
