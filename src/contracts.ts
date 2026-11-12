@@ -1,4 +1,4 @@
-export const CORE_API_CONTRACT_VERSION = "0.3.0" as const;
+export const CORE_API_CONTRACT_VERSION = "0.3.1" as const;
 
 export type GameKey = "atlas" | "7dtd" | "ark";
 export type PluginGame = GameKey | "platform";
@@ -73,6 +73,12 @@ export interface GameServerStatus {
   gameKey: GameKey;
   clusterName: string;
   configuredStatus: string;
+  isListed: boolean;
+  publicHostname: string | null;
+  gamePort: number | null;
+  queryPort: number | null;
+  maxPlayers: number | null;
+  mapName: string | null;
   online: boolean;
   playerCount: number | null;
   serverVersion: string | null;
