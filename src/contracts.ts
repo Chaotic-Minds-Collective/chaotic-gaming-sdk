@@ -186,7 +186,7 @@ export interface AcknowledgeRewardResponse {
   rewardId: string;
   outcome?: "delivered" | "failed";
 }
-ÿÿ
+Ã¿Ã¿
 
 export interface ResolvePlayerIdentityRequest {
   provider: string;
