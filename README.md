@@ -1,6 +1,6 @@
-# Chaotic Gaming SDK
+# Chaotic Minds Gaming SDK (CMG)
 
-Shared TypeScript contracts used by the Core API, website, Discord bot and game adapters.
+Shared TypeScript contracts for the Chaotic Minds Gaming (CMG) Core API, websites, Discord bots, and game plugins.
 
 ## Principles
 - Contracts only: no database connection, secrets, or runtime coupling.
